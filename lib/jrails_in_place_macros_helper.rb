@@ -20,7 +20,7 @@ module InPlaceMacrosHelper
   #                       be sent after the user presses "ok".
   #
   # Addtional +options+ are:
-  # <tt>method</tdd>::          symbol of HTTP verb; default: :post
+  # <tt>method</tt>::           symbol of HTTP verb; default: :post
   # <tt>field_type</tt>::       can be: text, textarea, select; default: text
   # <tt>select_options</tt>::   this is an array for the dropdown options, if field_type is 'select'
   # <tt>textarea_cols</tt>::    number of columns textarea will have, if field_type is textarea; default: 25
