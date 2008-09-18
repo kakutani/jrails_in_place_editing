@@ -20,6 +20,7 @@ module InPlaceMacrosHelper
   #                       be sent after the user presses "ok".
   #
   # Addtional +options+ are:
+  # <tt>method</tdd>::          symbol of HTTP verb; default: :post
   # <tt>field_type</tt>::       can be: text, textarea, select; default: text
   # <tt>select_options</tt>::   this is an array for the dropdown options, if field_type is 'select'
   # <tt>textarea_cols</tt>::    number of columns textarea will have, if field_type is textarea; default: 25
@@ -39,7 +40,8 @@ module InPlaceMacrosHelper
     js_options = {}
     js_options['url'] = "'" + (options[:url] || '') + "'"
     if respond_to?(:protect_against_forgery?) && protect_against_forgery?
-      js_options['params'] = "'#{request_forgery_protection_token}=' + encodeURIComponent('#{escape_javascript form_authenticity_token}')"
+      js_options['params'] = (options[:method] ? "'_method=#{options[:method]}&' + " : '')
+      js_options['params'] << "'#{request_forgery_protection_token}=' + encodeURIComponent('#{escape_javascript form_authenticity_token}')"
     end
     js_options['field_type'] = "'" + options[:field_type] + "'" if options[:field_type]
     js_options['select_options'] = "'" + (options[:select_options].is_a?(Array)?
