@@ -9,25 +9,25 @@ module InPlaceMacrosHelper
   #     <input type="submit" value="ok"/>
   #     <a onclick="javascript to cancel the editing">cancel</a>
   #   </form>
-  # 
+  #
   # The form is serialized and sent to the server using an AJAX call, the action on
   # the server should process the value and return the updated value in the body of
   # the reponse. The element will automatically be updated with the changed value
   # (as returned from the server).
-  # 
+  #
   # Required +options+ are:
   # <tt>:url</tt>::       Specifies the url where the updated value should
   #                       be sent after the user presses "ok".
-  # 
+  #
   # Addtional +options+ are:
   # <tt>field_type</tt>::       can be: text, textarea, select; default: text
   # <tt>select_options</tt>::   this is an array for the dropdown options, if field_type is 'select'
-  # <tt>textarea_cols</tt>::    number of columns textarea will have, if field_type is textarea; default: 25 
-  # <tt>textarea_rows</tt>::    number of rows textarea will have, if field_type is textarea; default: 10 
+  # <tt>textarea_cols</tt>::    number of columns textarea will have, if field_type is textarea; default: 25
+  # <tt>textarea_rows</tt>::    number of rows textarea will have, if field_type is textarea; default: 10
   # <tt>bg_over</tt>::          background color of editable elements on HOVER
-  # <tt>bg_out</tt>::           background color of editable elements on RESTORE from hover 
-  # <tt>saving_text</tt>::      text to be used when server is saving information; default: 'Saving...''' 
-  # <tt>saving_image</tt>::     specify an image location instead of text while server is saving; default: uses saving text 
+  # <tt>bg_out</tt>::           background color of editable elements on RESTORE from hover
+  # <tt>saving_text</tt>::      text to be used when server is saving information; default: 'Saving...'''
+  # <tt>saving_image</tt>::     specify an image location instead of text while server is saving; default: uses saving text
   # <tt>value_required</tt>::   if set to true, the element will not be saved unless a value is entered
   # <tt>original_html</tt>::    name of parameter holding original_html; default: original_html
   # <tt>save_button</tt>::      image button tag to use as "Save" button""
@@ -48,7 +48,7 @@ module InPlaceMacrosHelper
     js_options['textarea_rows'] = (options[:textarea_rows] || 10).to_i if options[:field_type].to_s == 'textarea'
     js_options['bg_over'] = "'" + options[:bg_over] + "'" if options[:bg_over]
     js_options['bg_out'] = "'" + options[:bg_out] + "'" if options[:bg_out]
-    js_options['saving_text'] = "'" + options[:saving_text] + "'" if options[:saving_text] 
+    js_options['saving_text'] = "'" + options[:saving_text] + "'" if options[:saving_text]
     js_options['saving_image'] = "'" + options[:saving_image] + "'" if options[:saving_image]
     js_options['value_required'] = !!options[:value_required] if options[:value_required]
     js_options['update_value'] = "'value'"
@@ -61,7 +61,7 @@ module InPlaceMacrosHelper
 
     javascript_tag(function)
   end
-  
+
   # Renders the value of the specified object and method with in-place editing capabilities.
   def in_place_editor_field(object, method, tag_options = {}, in_place_editor_options = {})
     field_html = nil
@@ -71,16 +71,16 @@ module InPlaceMacrosHelper
     if object.kind_of?(ActiveRecord::Base)
       base_id = object.id
       tag_options[:id] = "#{object.class.to_s.downcase}_#{method}_#{base_id}_in_place_editor"
-      field_html = content_tag(tag_options.delete(:tag), 
+      field_html = content_tag(tag_options.delete(:tag),
         object.__send__(method), tag_options)
     else
       tag = ::ActionView::Helpers::InstanceTag.new(object, method, self)
       base_id = tag.object.id
       tag_options[:id] = "#{object}_#{method}_#{base_id}_in_place_editor"
       field_html = tag.to_content_tag(tag_options.delete(:tag), tag_options)
-    end   
-    in_place_editor_options[:url] = in_place_editor_options[:url] || 
-                                    url_for({ :action => "set_#{object.kind_of?(ActiveRecord::Base) ? 
+    end
+    in_place_editor_options[:url] = in_place_editor_options[:url] ||
+                                    url_for({ :action => "set_#{object.kind_of?(ActiveRecord::Base) ?
                                       object.class.name.underscore : object}_#{method}", :id => base_id})
     field_html + in_place_editor(tag_options[:id], in_place_editor_options)
   end
